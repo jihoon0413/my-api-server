@@ -6,5 +6,6 @@ public record OrderCreateDto(
         Long memberId,
         List<Long> productId,
         List<Long> count
+        
 ) {
 }
