@@ -32,11 +32,11 @@ public class OrderService {
 
     //주문 생성
     @Transactional
-    public OrderResponseDto createOrder(OrderCreateDto dto, LocalDateTime orderTime) {
+    public OrderResponseDto createOrder(OrderCreateDto dto) {
 
         Member member = memberRepo.findById(dto.memberId()).orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다."));
 
-        Order order = Order.createOrder(member, orderTime);
+        Order order = Order.createOrder(member, LocalDateTime.now());
         List<Product> products = productRepo.findAllById(dto.productId());
 
         List<OrderProduct> orderProducts = IntStream.range(0, dto.count().size())
@@ -59,7 +59,7 @@ public class OrderService {
                 savedOrder.getOrderTime(),
                 OrderStatus.COMPLETED,
                 true);
-        
+
     }
 
 
