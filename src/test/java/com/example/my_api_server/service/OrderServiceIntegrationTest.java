@@ -7,6 +7,7 @@ import com.example.my_api_server.common.MemberFixture;
 import com.example.my_api_server.common.ProductFixture;
 import com.example.my_api_server.config.TestContainerConfig;
 import com.example.my_api_server.entity.Member;
+import com.example.my_api_server.entity.OrderStatus;
 import com.example.my_api_server.entity.Product;
 import com.example.my_api_server.repo.MemberDBRepo;
 import com.example.my_api_server.repo.OrderProductRepo;
@@ -137,13 +138,24 @@ public class OrderServiceIntegrationTest {
 
         }
 
-//        @Test
-//        @DisplayName("주문 생성 시 상품 개수")
-//        public void () {
-//          order 이전 사이즈랑 이후 사이즈 비교
-//          중간에 누가 order를 삭제, 추가?
+        @Test
+        @DisplayName("주문 생성 시 상품 개수")
+        public void createOrderCheckProductCount() {
 
-//        }
+            List<Long> counts = List.of(1L, 2L);
+            Member savedMember = getSavedMember("1234");
+            List<Product> products = getProducts();
+            List<Long> productIds = getProductIds(products);
+            OrderCreateDto createDto = new OrderCreateDto(savedMember.getId(), productIds, counts);
+
+            List<Product> beforeProduct = productRepo.findAll();
+            OrderResponseDto retDto = orderService.createOrder(createDto);
+            List<Product> nowProduct = productRepo.findAll();
+
+            assertThat(retDto.getOrderStatus()).isEqualTo(OrderStatus.COMPLETED);
+            assertThat(beforeProduct.size()).isEqualTo(nowProduct.size());
+
+        }
 
 
         /*
