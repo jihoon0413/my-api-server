@@ -10,7 +10,6 @@ import com.example.my_api_server.repo.OrderRepo;
 import com.example.my_api_server.repo.ProductRepo;
 import com.example.my_api_server.service.dto.OrderCreateDto;
 import com.example.my_api_server.service.dto.OrderResponseDto;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +36,7 @@ public class OrderService {
 
         Member member = memberRepo.findById(dto.memberId()).orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다."));
 
-        Order order = Order.createOrder(member, LocalDateTime.now());
+        Order order = Order.createOrder(member, dto.orderTime());
         List<Product> products = productRepo.findAllById(dto.productId());
 
         if (dto.productId().size() != products.size()) {
@@ -74,12 +73,10 @@ public class OrderService {
         log.info("@Retryable 테스트");
         Member member = memberRepo.findById(dto.memberId()).orElseThrow();
 
-        LocalDateTime orderTime = LocalDateTime.now();
-
         Order order = Order.builder()
                 .buyer(member)
                 .orderStatus(OrderStatus.PENDING)
-                .orderTime(orderTime)
+                .orderTime(dto.orderTime())
                 .build();
 
         List<Product> products = productRepo.findAllById(dto.productId());
@@ -120,12 +117,10 @@ public class OrderService {
 
         Member member = memberRepo.findById(dto.memberId()).orElseThrow();
 
-        LocalDateTime orderTime = LocalDateTime.now();
-
         Order order = Order.builder()
                 .buyer(member)
                 .orderStatus(OrderStatus.PENDING)
-                .orderTime(orderTime)
+                .orderTime(dto.orderTime())
                 .build();
 
         List<Product> products = productRepo.findAllByIdsWithXLock(dto.productId());
