@@ -186,9 +186,21 @@ public class OrderServiceIntegrationTest {
                     .hasMessage("회원이 존재하지 않습니다.");
         }
 
-        // 과제
-        //1. 주문 생성 시 상품 개수 조회 테스트 작성
-        //2. 존재하지 않는 상품에 대한 예외 테스트 작성
+        @Test
+        @DisplayName("존재하지 않는 상품에 대한 예외가 발생한다.")
+        public void validateProductWhenCreateOrder() {
+            List<Long> counts = List.of(1L, 2L);
+            Member savedMember = getSavedMember("1234");
+            List<Product> products = getProducts();
+            List<Long> productIds = List.of(1L, 3L);
+
+            OrderCreateDto createDto = new OrderCreateDto(savedMember.getId(), productIds, counts);
+
+            assertThatThrownBy(() -> orderService.createOrder(createDto))
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessage("존재하지 않은 상품이 포함되어 있습니다.");
+
+        }
 
 
     }
