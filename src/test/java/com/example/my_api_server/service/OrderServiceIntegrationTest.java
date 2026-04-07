@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.example.my_api_server.common.MemberFixture;
 import com.example.my_api_server.common.ProductFixture;
+import com.example.my_api_server.config.TestContainerConfig;
 import com.example.my_api_server.entity.Member;
 import com.example.my_api_server.entity.Product;
 import com.example.my_api_server.repo.MemberDBRepo;
@@ -20,9 +21,11 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest //Sping DI를 통해 빈(Bean)주입 해주는 어노테이션
+@Import(TestContainerConfig.class)
 @ActiveProfiles("test") // application-test.yaml 값을 읽는다!
 public class OrderServiceIntegrationTest {
 
@@ -134,6 +137,20 @@ public class OrderServiceIntegrationTest {
 
         }
 
+//        @Test
+//        @DisplayName("주문 생성 시 상품 개수")
+//        public void () {
+//          order 이전 사이즈랑 이후 사이즈 비교
+//          중간에 누가 order를 삭제, 추가?
+
+//        }
+
+
+        /*
+        1. 주문 생성 시 3개가 잘 insert 되는지 확인
+        2. 조회시 phantom Read가 잘 방지되는지 확인한다
+            - 해당 코드가 phantom Read를 보장해줘야하는지에 따라 달
+         */
     }
 
     @Nested()
@@ -156,7 +173,7 @@ public class OrderServiceIntegrationTest {
                     .isInstanceOf(RuntimeException.class)
                     .hasMessage("회원이 존재하지 않습니다.");
         }
-        
+
         // 과제
         //1. 주문 생성 시 상품 개수 조회 테스트 작성
         //2. 존재하지 않는 상품에 대한 예외 테스트 작성

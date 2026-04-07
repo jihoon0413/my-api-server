@@ -2,6 +2,7 @@ package com.example.my_api_server.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.example.my_api_server.config.TestContainerConfig;
 import com.example.my_api_server.entity.Member;
 import com.example.my_api_server.entity.Product;
 import com.example.my_api_server.entity.ProductType;
@@ -23,8 +24,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
+@Import(TestContainerConfig.class)
+@ActiveProfiles("test")
 class OrderServiceTest2 {
 
     private static final Logger log = LoggerFactory.getLogger(OrderServiceTest2.class);
